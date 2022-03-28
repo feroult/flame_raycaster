@@ -44,7 +44,7 @@ main() async {
   handleMetricsChanged();
   window.onMetricsChanged = handleMetricsChanged;
 
-  final lvl = await loadLevel('data/level.json');
+  final lvl = await loadLevel('data/level2.json');
   final game = Game(viewSize, lvl);
   final zero = Duration.zero;
   var prev = zero;
