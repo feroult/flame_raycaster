@@ -6,7 +6,7 @@ import 'raycaster.dart';
 import 'level.dart';
 import 'buttons.dart';
 
-class Game {
+class XGame {
   final Raycaster _rc;
   final Level _lvl;
   final _rotMat = Matrix2.identity(),
@@ -19,7 +19,7 @@ class Game {
   double _bobFreq = 10; // Frequency
   double _bobAmp = 2; // Amplitude
 
-  Game(Size screen, this._lvl) : _rc = Raycaster(screen, _lvl);
+  XGame(Size screen, this._lvl) : _rc = Raycaster(screen, _lvl);
 
   void update(double t, Pressed btn) {
     var fwd = btn(0),

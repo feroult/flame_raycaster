@@ -1,26 +1,39 @@
-import 'dart:ui';
 import 'dart:typed_data';
-import 'package:flutter/services.dart';
+import 'dart:ui';
+import 'dart:ui' as ui;
+
+import 'package:flame/game.dart';
+import 'package:flame_raycaster/level.dart';
+import 'package:flame_raycaster/utils.dart';
+import 'package:flame_raycaster/xgame.dart';
 import 'package:flutter/widgets.dart';
-import 'utils.dart';
-import 'game.dart';
+
 import 'buttons.dart';
 
-main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setEnabledSystemUIOverlays([]);
-  await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+void main() {
+  final game = RaycasterGame();
+  runApp(GameWidget(game: game));
+}
 
+class RaycasterGame extends FlameGame {
   final viewSize = Size(640, 360);
-  final bounds = Offset.zero & viewSize;
+  late Rect bounds;
 
   final deviceTransform = Float64List(16);
   late Offset offset;
   late Buttons btns;
-  final btnAtlas = await loadImage('img/gui.png');
+  late ui.Image btnAtlas;
 
-  final handleMetricsChanged = () async {
+  late Level level;
+  late XGame game;
+  final zero = Duration.zero;
+  var prev = Duration.zero;
+
+  RaycasterGame() {
+    bounds = Offset.zero & viewSize;
+  }
+
+  handleMetricsChanged() async {
     final size = window.physicalSize,
         pixelRatio = size.shortestSide / viewSize.shortestSide;
 
@@ -37,51 +50,34 @@ main() async {
       pixelRatio,
       1 / pixelRatio * window.devicePixelRatio,
       Offset.zero & size / pixelRatio,
-      btnAtlas,
+      this.btnAtlas,
     );
-  };
+  }
 
-  handleMetricsChanged();
-  window.onMetricsChanged = handleMetricsChanged;
+  @override
+  Future<void> onLoad() async {
+    btnAtlas = await loadImage('img/gui.png');
+    level = await loadLevel('data/level2.json');
+    game = XGame(this.viewSize, level);
+    await handleMetricsChanged();
+  }
 
-  final lvl = await loadLevel('data/level2.json');
-  final game = Game(viewSize, lvl);
-  final zero = Duration.zero;
-  var prev = zero;
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    handleMetricsChanged();
+  }
 
-  window.onBeginFrame = (now) {
-    final recorder = PictureRecorder();
-    final canvas = Canvas(recorder, bounds);
+  @override
+  void update(double dt) {
+    game.update(dt, btns.pressed);
+  }
 
-    final delta = prev == zero ? zero : now - prev;
-    prev = now;
-    final t = delta.inMicroseconds / 1000000;
-
-    // FPS counter
-    // print(1.0 / t);
-
-    canvas.save();
+  @override
+  void render(Canvas canvas) {
     canvas.translate(offset.dx, offset.dy);
     canvas.clipRect(bounds);
-    game.update(t, btns.pressed);
     game.render(canvas);
-    canvas.restore();
-
-    // Draw buttons
     btns.render(canvas);
-
-    final picture = recorder.endRecording();
-    final builder = SceneBuilder()
-      ..pushTransform(deviceTransform)
-      ..addPicture(Offset.zero, picture)
-      ..pop();
-
-    window
-      ..render(builder.build())
-      ..scheduleFrame();
-  };
-
-  window
-    ..scheduleFrame()
-    ..onPointerDataPacket = (p) => btns.update(p.data);
+  }
 }
