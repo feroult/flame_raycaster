@@ -25,6 +25,7 @@ void main() async {
 class RaycasterExempleGame extends FlameGame with HasDraggables, HasTappables {
   @override
   Future<void> onLoad() async {
+    add(new RaycasterComponent());
     await JoystickBuilder.build(this);
   }
 }
@@ -36,19 +37,9 @@ class RaycasterGame extends FlameGame {
   final deviceTransform = Float64List(16);
 
   late Offset offset;
-  late Buttons btns;
-  late ui.Image _btnAtlas;
-
-  ui.Image get btnAtlas => _btnAtlas;
-
-  set btnAtlas(ui.Image btnAtlas) {
-    _btnAtlas = btnAtlas;
-  }
 
   late Level level;
   late XGame game;
-  final zero = Duration.zero;
-  var prev = Duration.zero;
 
   RaycasterGame() {
     bounds = Offset.zero & viewSize;
@@ -65,25 +56,13 @@ class RaycasterGame extends FlameGame {
       ..[15] = 1;
 
     offset = (size / pixelRatio - viewSize as Offset) * 0.5;
-
-    btns = await loadButtons(
-      'data/buttons.json',
-      pixelRatio,
-      1 / pixelRatio * window.devicePixelRatio,
-      Offset.zero & size / pixelRatio,
-      this.btnAtlas,
-    );
   }
 
   @override
   Future<void> onLoad() async {
-    btnAtlas = await loadImage('img/gui.png');
     level = await loadLevel('data/level2.json');
     game = XGame(this.viewSize, level);
     await handleMetricsChanged();
-    await SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-    window.onPointerDataPacket = (p) => btns.update(p.data);
   }
 
   @override
@@ -95,7 +74,7 @@ class RaycasterGame extends FlameGame {
   @override
   void update(double dt) {
     super.update(dt);
-    game.update(dt, btns.pressed);
+    game.update(dt, (int i) => false);
   }
 
   @override
@@ -108,8 +87,6 @@ class RaycasterGame extends FlameGame {
 
     game.render(canvas);
     canvas.restore();
-
-    btns.render(canvas);
 
     canvas.transform(deviceTransform);
   }
@@ -131,6 +108,7 @@ class RaycasterComponent extends PositionComponent {
           anchor: anchor,
           priority: priority,
         );
+
 
   @override
   @mustCallSuper
