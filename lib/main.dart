@@ -41,7 +41,6 @@ class RaycasterGame extends FlameGame {
   }
 
   handleMetricsChanged() async {
-
     final size = window.physicalSize;
     final
         pixelRatio = size.shortestSide / viewSize.shortestSide;
@@ -51,8 +50,6 @@ class RaycasterGame extends FlameGame {
       ..[5] = pixelRatio
       ..[10] = 1
       ..[15] = 1;
-
-    print(deviceTransform);
 
     offset = (size / pixelRatio - viewSize as Offset) * 0.5;
 
