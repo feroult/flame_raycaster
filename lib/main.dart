@@ -15,6 +15,9 @@ import 'package:flutter/widgets.dart';
 import 'buttons.dart';
 
 void main() async {
+  await WidgetsFlutterBinding.ensureInitialized();
+  await Flame.device.setLandscape();
+  await Flame.device.setLandscapeLeftOnly();
   final game = RaycasterExempleGame();
   runApp(GameWidget(game: game));
 }
@@ -22,9 +25,7 @@ void main() async {
 class RaycasterExempleGame extends FlameGame with HasDraggables, HasTappables {
   @override
   Future<void> onLoad() async {
-    // await Flame.device.setLandscape();
-    // add(new RaycasterComponent(size: Vector2(640, 360)));
-    add(new JoystickAdvancedExample(size: size, position: Vector2(0, 0)));
+    await JoystickBuilder.build(this);
   }
 }
 

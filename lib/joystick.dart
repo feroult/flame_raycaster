@@ -1,28 +1,22 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
+import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_raycaster/utils.dart';
 import 'package:flutter/material.dart';
 
-class JoystickAdvancedExample extends PositionComponent {
-  late final JoystickComponent joystick;
-
-  JoystickAdvancedExample({Vector2? size, Vector2? position})
-      : super(size: size, position: position);
-
-  @override
-  Future<void> onLoad() async {
+class JoystickBuilder {
+  static build(FlameGame game) async {
     final image = await loadImage('img/joystick.png');
     final sheet = SpriteSheet.fromColumnsAndRows(
       image: image,
       columns: 6,
       rows: 1,
     );
-    joystick = JoystickComponent(
+    final joystick = JoystickComponent(
       knob: SpriteComponent(
         sprite: sheet.getSpriteById(1),
         size: Vector2.all(100),
@@ -31,7 +25,7 @@ class JoystickAdvancedExample extends PositionComponent {
         sprite: sheet.getSpriteById(0),
         size: Vector2.all(150),
       ),
-      margin: const EdgeInsets.only(left: 0, top: 0),
+      margin: const EdgeInsets.only(left: 40, bottom: 40),
     );
 
     final buttonSize = Vector2.all(80);
@@ -86,8 +80,8 @@ class JoystickAdvancedExample extends PositionComponent {
         ),
         onPressed: () => print('rotate'));
 
-    add(joystick);
-    add(flipButton);
-    add(flopButton);
+    game.add(joystick);
+    game.add(flipButton);
+    game.add(flopButton);
   }
 }
