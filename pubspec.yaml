@@ -19,3 +19,5 @@ flutter:
     - data/level2.json
     - img/gui.png
     - img/walls.png
+    - img/joystick.png
+
