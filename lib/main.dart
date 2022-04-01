@@ -6,6 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame_raycaster/level.dart';
 import 'package:flame_raycaster/utils.dart';
 import 'package:flame_raycaster/xgame.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'buttons.dart';
@@ -22,7 +23,13 @@ class RaycasterGame extends FlameGame {
   final deviceTransform = Float64List(16);
   late Offset offset;
   late Buttons btns;
-  late ui.Image btnAtlas;
+  late ui.Image _btnAtlas;
+
+  ui.Image get btnAtlas => _btnAtlas;
+
+  set btnAtlas(ui.Image btnAtlas) {
+    _btnAtlas = btnAtlas;
+  }
 
   late Level level;
   late XGame game;
@@ -34,7 +41,9 @@ class RaycasterGame extends FlameGame {
   }
 
   handleMetricsChanged() async {
-    final size = window.physicalSize,
+
+    final size = window.physicalSize;
+    final
         pixelRatio = size.shortestSide / viewSize.shortestSide;
 
     deviceTransform
@@ -42,6 +51,8 @@ class RaycasterGame extends FlameGame {
       ..[5] = pixelRatio
       ..[10] = 1
       ..[15] = 1;
+
+    print(deviceTransform);
 
     offset = (size / pixelRatio - viewSize as Offset) * 0.5;
 
@@ -60,6 +71,10 @@ class RaycasterGame extends FlameGame {
     level = await loadLevel('data/level2.json');
     game = XGame(this.viewSize, level);
     await handleMetricsChanged();
+    await SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+    window
+      .onPointerDataPacket = (p) => btns.update(p.data);
   }
 
   @override
@@ -70,14 +85,23 @@ class RaycasterGame extends FlameGame {
 
   @override
   void update(double dt) {
+    super.update(dt);
     game.update(dt, btns.pressed);
   }
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
+
+    canvas.save();
     canvas.translate(offset.dx, offset.dy);
     canvas.clipRect(bounds);
+
     game.render(canvas);
+    canvas.restore();
+
     btns.render(canvas);
+
+    canvas.transform(deviceTransform);
   }
 }
