@@ -52,19 +52,21 @@ class XGame {
 
     var x = 0.0;
     var y = 0.0;
+    var _moveVec = Vector2.zero();
+
 
     if (fwd || bwd) {
-      x += dir.x * move * (fwd ? 1 : -1);
-      y += dir.y * move * (fwd ? 1 : -1);
+      _moveVec.x += dir.x * move * (fwd ? 1 : -1);
+      _moveVec.y += dir.y * move * (fwd ? 1 : -1);
     }
 
     if (stfL || stfR) {
-      x += dir.y * move * (stfL ? -1 : 1);
-      y += -dir.x * move * (stfL ? -1 : 1);
+      _moveVec.x += dir.y * move * (stfL ? -1 : 1);
+      _moveVec.y += -dir.x * move * (stfL ? -1 : 1);
     }
-
-    _moveVec.x = x;
-    _moveVec.y = y;
+    //
+    // _moveVec.x = x;
+    // _moveVec.y = y;
 
     if (fwd || bwd || stfL || stfR) {
       _bobTime += t * _bobFreq;
