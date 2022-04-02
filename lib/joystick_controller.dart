@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 
 class CustomRaycasterController extends RaycasterController {
   JoystickComponent joystick;
+  bool isRotatingLeft = false;
+  bool isRotatingRight = false;
 
   CustomRaycasterController(this.joystick);
 
@@ -49,12 +51,12 @@ class CustomRaycasterController extends RaycasterController {
 
   @override
   bool rotateRight() {
-    return false;
+    return isRotatingRight;
   }
 
   @override
   bool rotateLeft() {
-    return false;
+    return isRotatingLeft;
   }
 }
 
@@ -83,44 +85,45 @@ class JoystickController {
       margin: const EdgeInsets.only(left: 40, bottom: 40),
     );
 
+    final controller = CustomRaycasterController(joystick);
+
     final buttonSize = Vector2.all(80);
     // A button with margin from the edge of the viewport that flips the
     // rendering of the player on the X-axis.
-    final flipButton = HudButtonComponent(
-      button: SpriteComponent(
-        sprite: sheet.getSpriteById(2),
-        size: buttonSize,
-      ),
-      buttonDown: SpriteComponent(
-        sprite: sheet.getSpriteById(4),
-        size: buttonSize,
-      ),
-      margin: const EdgeInsets.only(
-        right: 40,
-        bottom: 60,
-      ),
-      onPressed: () => print('flip X'),
-    );
+    final rotateRight = HudButtonComponent(
+        button: SpriteComponent(
+          sprite: sheet.getSpriteById(2),
+          size: buttonSize,
+        ),
+        buttonDown: SpriteComponent(
+          sprite: sheet.getSpriteById(4),
+          size: buttonSize,
+        ),
+        margin: const EdgeInsets.only(
+          right: 40,
+          bottom: 60,
+        ),
+        onPressed: () => controller.isRotatingRight = true,
+        onReleased: () => controller.isRotatingRight = false);
 
     // A button with margin from the edge of the viewport that flips the
     // rendering of the player on the Y-axis.
-    final flopButton = HudButtonComponent(
-      button: SpriteComponent(
-        sprite: sheet.getSpriteById(2),
-        size: buttonSize,
-      ),
-      buttonDown: SpriteComponent(
-        sprite: sheet.getSpriteById(5),
-        size: buttonSize,
-      ),
-      margin: const EdgeInsets.only(
-        right: 120,
-        bottom: 60,
-      ),
-      onPressed: () => print('flip Y'),
-    );
+    final rotateLeft = HudButtonComponent(
+        button: SpriteComponent(
+          sprite: sheet.getSpriteById(2),
+          size: buttonSize,
+        ),
+        buttonDown: SpriteComponent(
+          sprite: sheet.getSpriteById(4),
+          size: buttonSize,
+        ),
+        margin: const EdgeInsets.only(
+          right: 120,
+          bottom: 60,
+        ),
+        onPressed: () => controller.isRotatingLeft = true,
+        onReleased: () => controller.isRotatingLeft = false);
 
-    return JoystickController([joystick, flipButton, flopButton],
-        CustomRaycasterController(joystick));
+    return JoystickController([joystick, rotateRight, rotateLeft], controller);
   }
 }
