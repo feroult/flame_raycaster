@@ -33,7 +33,7 @@ class RaycasterComponent extends PositionComponent {
     Vector2? size,
     Vector2? scale,
     double? angle,
-    Anchor? anchor,g
+    Anchor? anchor,
     int? priority,
   }) : super(
           position: position,
