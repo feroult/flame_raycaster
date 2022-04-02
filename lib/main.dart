@@ -40,7 +40,7 @@ class RaycasterComponent extends PositionComponent {
           angle: angle,
           anchor: anchor,
           priority: priority,
-        ) {}
+        );
 
   @override
   Future<void> onLoad() async {
