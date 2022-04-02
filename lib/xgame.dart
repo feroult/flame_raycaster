@@ -56,8 +56,8 @@ class XGame {
     }
 
     if (stfL || stfR) {
-      _moveVec.x = dir.y * move * (stfL ? 1 : -1);
-      _moveVec.y = -dir.x * move * (stfL ? 1 : -1);
+      _moveVec.x = dir.y * move * (stfL ? -1 : 1);
+      _moveVec.y = -dir.x * move * (stfL ? -1 : 1);
     }
 
     if (fwd || bwd || stfL || stfR) {
