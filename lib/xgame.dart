@@ -7,6 +7,20 @@ import 'level.dart';
 import 'raycaster.dart';
 import 'utils.dart';
 
+abstract class RaycasterController {
+  bool moveForward();
+
+  bool moveBack();
+
+  bool moveLeft();
+
+  bool moveRight();
+
+  bool rotateLeft();
+
+  bool rotateRight();
+}
+
 class XGame {
   final Raycaster _rc;
   final Level _lvl;
@@ -22,13 +36,13 @@ class XGame {
 
   XGame(Size screen, this._lvl) : _rc = Raycaster(screen, _lvl);
 
-  void update(double t, Function btn) {
-    var fwd = btn(0),
-        bwd = btn(2),
-        stfL = btn(1),
-        stfR = btn(3),
-        rotL = btn(4),
-        rotR = btn(5);
+  void update(double t, RaycasterController controller) {
+    var fwd = controller.moveForward(),
+        bwd = controller.moveBack(),
+        stfL = controller.moveLeft(),
+        stfR = controller.moveRight(),
+        rotL = controller.rotateLeft(),
+        rotR = controller.rotateRight();
 
     var move = _moveSpeed * t,
         rot = _rotSpeed * t,

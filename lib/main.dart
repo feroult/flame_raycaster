@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame_raycaster/joystick.dart';
+import 'package:flame_raycaster/joystick_controller.dart';
 import 'package:flame_raycaster/utils.dart';
 import 'package:flame_raycaster/xgame.dart';
 import 'package:flutter/widgets.dart';
@@ -17,16 +17,18 @@ void main() async {
 class RaycasterExempleGame extends FlameGame with HasDraggables, HasTappables {
   @override
   Future<void> onLoad() async {
-    add(new RaycasterComponent(
-        size: size, position: size / 2, anchor: Anchor.center));
-    await JoystickBuilder.build(this);
+    final joystick = await JoystickController.build();
+    add(new RaycasterComponent(joystick.controller, size: size));
+    addAll(joystick.components);
   }
 }
 
 class RaycasterComponent extends PositionComponent {
+  RaycasterController controller;
   late XGame game;
 
-  RaycasterComponent({
+  RaycasterComponent(
+    this.controller, {
     Vector2? position,
     Vector2? size,
     Vector2? scale,
@@ -51,7 +53,9 @@ class RaycasterComponent extends PositionComponent {
 
   @override
   @mustCallSuper
-  void update(double dt) {}
+  void update(double dt) {
+    game.update(dt, controller);
+  }
 
   @override
   @mustCallSuper

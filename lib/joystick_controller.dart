@@ -1,15 +1,70 @@
-import 'dart:math';
-
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_raycaster/utils.dart';
+import 'package:flame_raycaster/xgame.dart';
 import 'package:flutter/material.dart';
 
-class JoystickBuilder {
-  static build(FlameGame game) async {
+class CustomRaycasterController extends RaycasterController {
+  JoystickComponent joystick;
+
+  CustomRaycasterController(this.joystick);
+
+  @override
+  bool moveForward() {
+    return [
+      JoystickDirection.up,
+      JoystickDirection.upLeft,
+      JoystickDirection.upRight
+    ].contains(joystick.direction);
+  }
+
+  @override
+  bool moveBack() {
+    return [
+      JoystickDirection.down,
+      JoystickDirection.downLeft,
+      JoystickDirection.downRight
+    ].contains(joystick.direction);
+  }
+
+  @override
+  bool moveRight() {
+    return [
+      JoystickDirection.right,
+      JoystickDirection.upRight,
+      JoystickDirection.downRight
+    ].contains(joystick.direction);
+  }
+
+  @override
+  bool moveLeft() {
+    return [
+      JoystickDirection.left,
+      JoystickDirection.upLeft,
+      JoystickDirection.downLeft
+    ].contains(joystick.direction);
+  }
+
+  @override
+  bool rotateRight() {
+    return false;
+  }
+
+  @override
+  bool rotateLeft() {
+    return false;
+  }
+}
+
+class JoystickController {
+  List<Component> components;
+  RaycasterController controller;
+
+  JoystickController(this.components, this.controller);
+
+  static build() async {
     final image = await loadImage('img/joystick.png');
     final sheet = SpriteSheet.fromColumnsAndRows(
       image: image,
@@ -41,7 +96,7 @@ class JoystickBuilder {
         size: buttonSize,
       ),
       margin: const EdgeInsets.only(
-        right: 80,
+        right: 40,
         bottom: 60,
       ),
       onPressed: () => print('flip X'),
@@ -51,7 +106,7 @@ class JoystickBuilder {
     // rendering of the player on the Y-axis.
     final flopButton = HudButtonComponent(
       button: SpriteComponent(
-        sprite: sheet.getSpriteById(3),
+        sprite: sheet.getSpriteById(2),
         size: buttonSize,
       ),
       buttonDown: SpriteComponent(
@@ -59,29 +114,13 @@ class JoystickBuilder {
         size: buttonSize,
       ),
       margin: const EdgeInsets.only(
-        right: 160,
+        right: 120,
         bottom: 60,
       ),
       onPressed: () => print('flip Y'),
     );
 
-    final rng = Random();
-    // A button, created from a shape, that adds a rotation effect to the player
-    // when it is pressed.
-    final shapeButton = HudButtonComponent(
-        button: CircleComponent(radius: 35),
-        buttonDown: RectangleComponent(
-          size: buttonSize,
-          paint: BasicPalette.blue.paint(),
-        ),
-        margin: const EdgeInsets.only(
-          right: 85,
-          bottom: 150,
-        ),
-        onPressed: () => print('rotate'));
-
-    game.add(joystick);
-    game.add(flipButton);
-    game.add(flopButton);
+    return JoystickController([joystick, flipButton, flopButton],
+        CustomRaycasterController(joystick));
   }
 }
