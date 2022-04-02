@@ -45,7 +45,8 @@ class RaycasterComponent extends PositionComponent {
   @override
   Future<void> onLoad() async {
     final level = await loadLevel('data/level2.json');
-    game = XGame(Size(size[0].floor() * 1.0, size[1].floor() * 1.0), level);
+    game = XGame(
+        Size(size[0].floor().toDouble(), size[1].floor().toDouble()), level);
   }
 
   @override
