@@ -10,7 +10,7 @@ import 'utils.dart';
 abstract class RaycasterController {
   bool moveForward();
 
-  bool moveBack();
+  bool moveBackward();
 
   bool moveLeft();
 
@@ -25,7 +25,6 @@ class XGame {
   final Raycaster _rc;
   final Level _lvl;
   final _rotMat = Matrix2.identity(),
-      _moveVec = Vector2.zero(),
       _moveSpeed = 3.0,
       _rotSpeed = 1.7,
       _wallPadding = 0.2;
@@ -37,45 +36,35 @@ class XGame {
   XGame(Size screen, this._lvl) : _rc = Raycaster(screen, _lvl);
 
   void update(double t, RaycasterController controller) {
-    var fwd = controller.moveForward(),
-        bwd = controller.moveBack(),
-        stfL = controller.moveLeft(),
-        stfR = controller.moveRight(),
-        rotL = controller.rotateLeft(),
-        rotR = controller.rotateRight();
-
     var move = _moveSpeed * t,
         rot = _rotSpeed * t,
         dir = _rc.dir,
         pos = _rc.pos,
         plane = _rc.plane;
 
-    var x = 0.0;
-    var y = 0.0;
-    var _moveVec = Vector2.zero();
+    var moveVec = Vector2.zero();
 
-
-    if (fwd || bwd) {
-      _moveVec.x += dir.x * move * (fwd ? 1 : -1);
-      _moveVec.y += dir.y * move * (fwd ? 1 : -1);
+    if (controller.moveForward() || controller.moveBackward()) {
+      moveVec.x += dir.x * move * (controller.moveForward() ? 1 : -1);
+      moveVec.y += dir.y * move * (controller.moveForward() ? 1 : -1);
     }
 
-    if (stfL || stfR) {
-      _moveVec.x += dir.y * move * (stfL ? -1 : 1);
-      _moveVec.y += -dir.x * move * (stfL ? -1 : 1);
+    if (controller.moveLeft() || controller.moveRight()) {
+      moveVec.x += dir.y * move * (controller.moveLeft() ? -1 : 1);
+      moveVec.y += -dir.x * move * (controller.moveLeft() ? -1 : 1);
     }
-    //
-    // _moveVec.x = x;
-    // _moveVec.y = y;
 
-    if (fwd || bwd || stfL || stfR) {
+    if (controller.moveForward() ||
+        controller.moveBackward() ||
+        controller.moveLeft() ||
+        controller.moveRight()) {
       _bobTime += t * _bobFreq;
       // if (_bob <= -1 || _bob >= 1) _bobFreq *= -1;
-      _translate(_lvl, pos, _moveVec, _wallPadding);
+      _translate(_lvl, pos, moveVec, _wallPadding);
     }
 
-    if (rotL || rotR) {
-      _rotMat.setRotation(rot * (rotL ? 1 : -1));
+    if (controller.rotateLeft() || controller.rotateRight()) {
+      _rotMat.setRotation(rot * (controller.rotateLeft() ? 1 : -1));
       _rotMat.transform(dir);
       _rotMat.transform(plane);
     }

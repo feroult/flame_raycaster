@@ -21,7 +21,7 @@ class CustomRaycasterController extends RaycasterController {
   }
 
   @override
-  bool moveBack() {
+  bool moveBackward() {
     return [
       JoystickDirection.down,
       JoystickDirection.downLeft,
