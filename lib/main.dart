@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -19,7 +17,7 @@ void main() async {
 class RaycasterExempleGame extends FlameGame with HasDraggables, HasTappables {
   @override
   Future<void> onLoad() async {
-    add(new RaycasterComponent());
+    add(new RaycasterComponent(position: Vector2(100, 100)));
     await JoystickBuilder.build(this);
   }
 }
@@ -46,7 +44,7 @@ class RaycasterComponent extends PositionComponent {
   @override
   Future<void> onLoad() async {
     final level = await loadLevel('data/level2.json');
-    game = XGame(Size(640, 360), level);
+    game = XGame(Size(100, 100), level);
   }
 
   @override
