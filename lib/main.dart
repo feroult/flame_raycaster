@@ -19,6 +19,7 @@ void main() async {
   await Flame.device.setLandscape();
   await Flame.device.setLandscapeLeftOnly();
   final game = RaycasterExempleGame();
+  // final game = RaycasterGame();
   runApp(GameWidget(game: game));
 }
 
@@ -82,17 +83,18 @@ class RaycasterGame extends FlameGame {
     super.render(canvas);
 
     canvas.save();
-    canvas.translate(offset.dx, offset.dy);
-    canvas.clipRect(bounds);
-
+    // canvas.translate(offset.dx, offset.dy);
+    // canvas.clipRect(bounds);
     game.render(canvas);
     canvas.restore();
 
-    canvas.transform(deviceTransform);
+    // canvas.transform(deviceTransform);
   }
 }
 
 class RaycasterComponent extends PositionComponent {
+  late XGame game;
+
   RaycasterComponent({
     Vector2? position,
     Vector2? size,
@@ -109,6 +111,11 @@ class RaycasterComponent extends PositionComponent {
           priority: priority,
         );
 
+  @override
+  Future<void> onLoad() async {
+    final level = await loadLevel('data/level2.json');
+    game = XGame(Size(640, 360), level);
+  }
 
   @override
   @mustCallSuper
@@ -120,5 +127,7 @@ class RaycasterComponent extends PositionComponent {
 
   @mustCallSuper
   @override
-  void render(Canvas canvas) {}
+  void render(Canvas canvas) {
+    game.render(canvas);
+  }
 }
