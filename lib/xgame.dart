@@ -50,15 +50,21 @@ class XGame {
         pos = _rc.pos,
         plane = _rc.plane;
 
+    var x = 0.0;
+    var y = 0.0;
+
     if (fwd || bwd) {
-      _moveVec.x = dir.x * move * (fwd ? 1 : -1);
-      _moveVec.y = dir.y * move * (fwd ? 1 : -1);
+      x += dir.x * move * (fwd ? 1 : -1);
+      y += dir.y * move * (fwd ? 1 : -1);
     }
 
     if (stfL || stfR) {
-      _moveVec.x = dir.y * move * (stfL ? -1 : 1);
-      _moveVec.y = -dir.x * move * (stfL ? -1 : 1);
+      x += dir.y * move * (stfL ? -1 : 1);
+      y += -dir.x * move * (stfL ? -1 : 1);
     }
+
+    _moveVec.x = x;
+    _moveVec.y = y;
 
     if (fwd || bwd || stfL || stfR) {
       _bobTime += t * _bobFreq;
