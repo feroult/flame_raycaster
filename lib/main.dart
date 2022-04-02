@@ -18,7 +18,7 @@ class RaycasterExempleGame extends FlameGame with HasDraggables, HasTappables {
   @override
   Future<void> onLoad() async {
     add(new RaycasterComponent(
-        size: size * 0.8, position: size / 2, anchor: Anchor.center));
+        size: size, position: size / 2, anchor: Anchor.center));
     await JoystickBuilder.build(this);
   }
 }
