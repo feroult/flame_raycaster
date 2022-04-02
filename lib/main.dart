@@ -17,7 +17,8 @@ void main() async {
 class RaycasterExempleGame extends FlameGame with HasDraggables, HasTappables {
   @override
   Future<void> onLoad() async {
-    add(new RaycasterComponent(position: Vector2(100, 100)));
+    add(new RaycasterComponent(
+        size: size * 0.8, position: size / 2, anchor: Anchor.center));
     await JoystickBuilder.build(this);
   }
 }
@@ -39,12 +40,12 @@ class RaycasterComponent extends PositionComponent {
           angle: angle,
           anchor: anchor,
           priority: priority,
-        );
+        ) {}
 
   @override
   Future<void> onLoad() async {
     final level = await loadLevel('data/level2.json');
-    game = XGame(Size(100, 100), level);
+    game = XGame(Size(size[0].floor() * 1.0, size[1].floor() * 1.0), level);
   }
 
   @override
