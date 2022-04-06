@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
+import 'package:tiled/tiled.dart';
 import 'package:vector_math/vector_math.dart';
 
 import 'level.dart';
@@ -33,8 +35,10 @@ Future<Image> loadImage(String key) async {
 
 Future<Level> loadLevel(String key) async {
   final d = jsonDecode(await rootBundle.loadString(key));
+  final map = await loadMap();
   return Level(
-    ilst(d['map']),
+    // ilst(d['map']),
+    map,
     d['mapSize'],
     await loadImage(d['atlas']),
     d['atlasSize'],
@@ -50,3 +54,11 @@ List<Rect> rects(List rects) =>
     rects.map((r) => Rect.fromLTWH(r[0], r[1], r[2], r[3])).toList();
 
 Vector2 vec(v) => Vector2(v[0], v[1]);
+
+Future<List<int>> loadMap() async {
+  final contents = await Flame.bundle.loadString('data/raycaster.tmx');
+  final tmx = TileMapParser.parseTmx(contents);
+  final map = (tmx.layers[0] as TileLayer).data!;
+  return map;
+}
+

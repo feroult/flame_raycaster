@@ -1,12 +1,10 @@
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame_raycaster/utils.dart';
 import 'package:flame_raycaster/raycaster_world.dart';
+import 'package:flame_raycaster/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:tiled/tiled.dart';
 
 class CustomRaycasterController extends RaycasterController {
   JoystickComponent joystick;
@@ -106,7 +104,7 @@ class JoystickController {
           bottom: 60,
         ),
         onPressed: () {
-          loadTile();
+          loadMap();
           controller.isRotatingRight = true;
         },
         onReleased: () => controller.isRotatingRight = false);
@@ -131,11 +129,4 @@ class JoystickController {
 
     return JoystickController([joystick, rotateRight, rotateLeft], controller);
   }
-}
-
-Future<TiledMap> loadTile() async {
-  final contents = await Flame.bundle.loadString('data/raycaster.tmx');
-  var parseTmx = TileMapParser.parseTmx(contents);
-  print((parseTmx.layers[0] as TileLayer).data!.length);
-  return parseTmx;
 }

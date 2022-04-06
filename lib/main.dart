@@ -46,7 +46,7 @@ class RaycasterComponent extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    final level = await loadLevel('data/level.json');
+    final level = await loadLevel('data/level2.json');
     world = RaycasterWorld(
         Size(size[0].floor().toDouble(), size[1].floor().toDouble()), level);
   }
