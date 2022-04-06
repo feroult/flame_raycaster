@@ -25,7 +25,7 @@ class RaycasterExempleGame extends FlameGame with HasDraggables, HasTappables {
 
 class RaycasterComponent extends PositionComponent {
   RaycasterController controller;
-  late XGame game;
+  late RaycasterWorld game;
 
   RaycasterComponent(
     this.controller, {
@@ -47,7 +47,7 @@ class RaycasterComponent extends PositionComponent {
   @override
   Future<void> onLoad() async {
     final level = await loadLevel('data/level.json');
-    game = XGame(
+    game = RaycasterWorld(
         Size(size[0].floor().toDouble(), size[1].floor().toDouble()), level);
   }
 

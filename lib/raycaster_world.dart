@@ -21,7 +21,7 @@ abstract class RaycasterController {
   bool rotateRight();
 }
 
-class XGame {
+class RaycasterWorld {
   final Raycaster _rc;
   final Level _lvl;
   final _rotMat = Matrix2.identity(),
@@ -33,7 +33,7 @@ class XGame {
   double _bobFreq = 10; // Frequency
   double _bobAmp = 2; // Amplitude
 
-  XGame(Size screen, this._lvl) : _rc = Raycaster(screen, _lvl);
+  RaycasterWorld(Size screen, this._lvl) : _rc = Raycaster(screen, _lvl);
 
   void update(double t, RaycasterController controller) {
     var move = _moveSpeed * t,

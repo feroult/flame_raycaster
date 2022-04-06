@@ -11,11 +11,13 @@ dependencies:
   flutter:
     sdk: flutter
   flame: ^1.1.0
+  tiled: 0.8.0
 
 flutter:
   assets:
     - data/level.json
     - data/level2.json
+    - data/raycaster.tmx
     - img/walls.png
     - img/joystick.png
 
