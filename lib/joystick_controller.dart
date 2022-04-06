@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_raycaster/utils.dart';
-import 'package:flame_raycaster/xgame.dart';
+import 'package:flame_raycaster/raycaster_world.dart';
 import 'package:flutter/material.dart';
 import 'package:tiled/tiled.dart';
 

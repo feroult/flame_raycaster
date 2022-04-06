@@ -3,7 +3,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_raycaster/joystick_controller.dart';
 import 'package:flame_raycaster/utils.dart';
-import 'package:flame_raycaster/xgame.dart';
+import 'package:flame_raycaster/raycaster_world.dart';
 import 'package:flutter/widgets.dart';
 
 void main() async {
@@ -25,7 +25,7 @@ class RaycasterExempleGame extends FlameGame with HasDraggables, HasTappables {
 
 class RaycasterComponent extends PositionComponent {
   RaycasterController controller;
-  late RaycasterWorld game;
+  late RaycasterWorld world;
 
   RaycasterComponent(
     this.controller, {
@@ -47,14 +47,14 @@ class RaycasterComponent extends PositionComponent {
   @override
   Future<void> onLoad() async {
     final level = await loadLevel('data/level.json');
-    game = RaycasterWorld(
+    world = RaycasterWorld(
         Size(size[0].floor().toDouble(), size[1].floor().toDouble()), level);
   }
 
   @override
   @mustCallSuper
   void update(double dt) {
-    game.update(dt, controller);
+    world.update(dt, controller);
   }
 
   @override
@@ -64,6 +64,6 @@ class RaycasterComponent extends PositionComponent {
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    game.render(canvas);
+    world.render(canvas);
   }
 }
