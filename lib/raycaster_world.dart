@@ -33,7 +33,8 @@ class RaycasterWorld {
   double _bobFreq = 10; // Frequency
   double _bobAmp = 2; // Amplitude
 
-  RaycasterWorld(Size screen, this._lvl) : _rc = Raycaster(screen, _lvl);
+  RaycasterWorld(double width, double height, this._lvl)
+      : _rc = Raycaster(Size(width, height), _lvl);
 
   void update(double t, RaycasterController controller) {
     var move = _moveSpeed * t,
