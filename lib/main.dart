@@ -2,8 +2,8 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_raycaster/joystick_controller.dart';
-import 'package:flame_raycaster/utils.dart';
 import 'package:flame_raycaster/raycaster_world.dart';
+import 'package:flame_raycaster/utils.dart';
 import 'package:flutter/widgets.dart';
 
 void main() async {
@@ -47,7 +47,9 @@ class RaycasterComponent extends PositionComponent {
   @override
   Future<void> onLoad() async {
     final level = await loadLevel('data/level2.json');
-    world = RaycasterWorld(size[0].floor().toDouble(), size[1].floorToDouble().toDouble(), level);
+    var width = size[0].floor().toDouble();
+    var height = size[1].floorToDouble().toDouble();
+    world = RaycasterWorld(width, height, level);
   }
 
   @override
