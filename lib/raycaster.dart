@@ -74,15 +74,8 @@ class Raycaster {
           ..shader = Gradient.linear(
             Offset.zero,
             Offset(0, _screen.height),
-            [
-              _lvl.ceil[0],
-              _lvl.ceil[1],
-              0xff000000,
-              0xff000000,
-              _lvl.floor[1],
-              _lvl.floor[0],
-            ].map((c) => Color(c)).toList(),
-            [0, 0.35, 0.45, 0.55, 0.65, 1],
+            _lvl.ceilFloorGradientColors.map((c) => Color(c)).toList(),
+            _lvl.ceilFloorGradientColorStops,
           ) {
     plane = Vector2(dir.y, -dir.x)
       ..normalize()
