@@ -1,8 +1,9 @@
 import 'dart:ui';
+
+import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_raycaster/utils.dart';
 import 'package:tiled/tiled.dart';
-import 'package:vector_math/vector_math.dart';
 
 class Level {
   // The map data
@@ -31,12 +32,10 @@ class Level {
     this.floor,
   );
 
-  static Future<Level> fromTile(String key) async {
+  static Future<Level> fromTile(String key, Vector2 pos, Vector2 dir) async {
     final tmx = await loadTile(key);
     final map = (tmx.layers[0] as TileLayer).data!;
     final atlas = await loadImage('img/walls.png');
-    final pos = Vector2(4.0, 4.0);
-    final dir = Vector2(1.0, 0.0);
     final ceil = [4286805660, 4284438351];
     final floor = [4294954154, 4289417782];
     return Level(map, tmx.width, atlas, 4, pos, dir, ceil, floor);

@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:tiled/tiled.dart';
-import 'package:vector_math/vector_math.dart';
 
 import 'level.dart';
 
@@ -61,4 +61,3 @@ Future<List<int>> loadMap() async {
   final map = (tmx.layers[0] as TileLayer).data!;
   return map;
 }
-

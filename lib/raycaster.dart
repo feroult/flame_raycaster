@@ -11,14 +11,16 @@
 // https://lodev.org/cgtutor/raycasting3.html
 // https://lodev.org/cgtutor/raycasting4.html
 
+import 'dart:math';
+import 'dart:typed_data';
 // https://github.com/mdn/canvas-raycaster
 
 import 'dart:ui';
-import 'dart:math';
-import 'dart:typed_data';
-import 'package:vector_math/vector_math.dart';
-import 'utils.dart';
+
+import 'package:flame/components.dart';
+
 import 'level.dart';
+import 'utils.dart';
 
 // Texture size
 const texW = 32, texH = 32;

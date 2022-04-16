@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:vector_math/vector_math.dart';
+import 'package:flame/components.dart';
 
 import 'level.dart';
 import 'raycaster.dart';
