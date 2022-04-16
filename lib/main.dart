@@ -3,8 +3,9 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_raycaster/joystick_controller.dart';
 import 'package:flame_raycaster/raycaster_world.dart';
-import 'package:flame_raycaster/utils.dart';
 import 'package:flutter/widgets.dart';
+
+import 'level.dart';
 
 void main() async {
   await WidgetsFlutterBinding.ensureInitialized();
@@ -18,16 +19,19 @@ class RaycasterExempleGame extends FlameGame with HasDraggables, HasTappables {
   @override
   Future<void> onLoad() async {
     final joystick = await JoystickController.build();
-    add(new RaycasterComponent(joystick.controller, size: size));
+    final level = await Level.fromTile('data/raycaster.tmx');
+    add(new RaycasterComponent(level, joystick.controller, size: size));
     addAll(joystick.components);
   }
 }
 
 class RaycasterComponent extends PositionComponent {
+  Level level;
   RaycasterController controller;
   late RaycasterWorld world;
 
   RaycasterComponent(
+    this.level,
     this.controller, {
     Vector2? position,
     Vector2? size,
@@ -46,7 +50,6 @@ class RaycasterComponent extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    final level = await loadLevel('data/level2.json');
     var width = size[0].floor().toDouble();
     var height = size[1].floorToDouble().toDouble();
     world = RaycasterWorld(width, height, level);
