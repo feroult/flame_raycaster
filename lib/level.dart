@@ -45,8 +45,8 @@ class LevelBuilder {
   int _mapSize;
   Image _atlas;
   int _atlasSize;
-  var _position = Vector2(0.0, 0.0);
-  var _direction = Vector2(0.0, 0.0);
+  var _position = Vector2(1.0, 1.0);
+  var _direction = Vector2(1.0, 1.0);
   var _ceilFloorGradientColors = [
     0xFF83769C,
     0xFF83769C,
