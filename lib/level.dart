@@ -35,18 +35,6 @@ class Level {
     this.ceilFloorGradientColorStops,
   );
 
-  // static Future<Level> fromTile(
-  //     String key, Vector2 position, Vector2 direction) async {
-  //   final tmx = await loadTile(key);
-  //   final map = (tmx.layers[0] as TileLayer).data!;
-  //   final atlas = await loadImage('img/walls.png');
-  //   // final ceil = [0xFF83769C, 0xFF5F574F];
-  //   // final floor = [0xFFFFCCAA, 0xFFAB5236];
-  //   final ceil = [0xFF83769C, 0xFF83769C];
-  //   final floor = [0xFFFFCCAA, 0xFFFFCCAA];
-  //   return Level(map, tmx.width, atlas, 4, position, direction, ceil, floor);
-  // }
-
   // Convert coordinates to map index (but Y is flipped)
   int get(num x, num y) =>
       _map[(mapSize - y.floor() - 1) * mapSize + x.floor()];
@@ -54,8 +42,9 @@ class Level {
 
 class LevelBuilder {
   List<int> _map;
-  Image _atlas;
   int _mapSize;
+  Image _atlas;
+  int _atlasSize;
   var _position = Vector2(0.0, 0.0);
   var _direction = Vector2(0.0, 0.0);
   var _ceilFloorGradientColors = [
@@ -83,17 +72,17 @@ class LevelBuilder {
     }
   }
 
-  LevelBuilder(this._map, this._atlas, this._mapSize);
+  LevelBuilder(this._map, this._mapSize, this._atlas, this._atlasSize);
 
   static Future<LevelBuilder> fromTile(String key) async {
     final tmx = await loadTile(key);
     final map = (tmx.layers[0] as TileLayer).data!;
     final atlas = await loadImage('img/walls.png');
-    return LevelBuilder(map, atlas, tmx.width);
+    return LevelBuilder(map, tmx.width, atlas, tmx.tilesets[0].columns!);
   }
 
   Level build() {
-    return Level(_map, _mapSize, _atlas, 4, _position, _direction,
+    return Level(_map, _mapSize, _atlas, _atlasSize, _position, _direction,
         _ceilFloorGradientColors, _ceilFloorGradientColorStops);
   }
 
