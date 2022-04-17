@@ -210,3 +210,5 @@ class Raycaster {
     _sliverColors[x] = greyscale(att, side == 1 ? 255 : 200);
   }
 }
+
+
