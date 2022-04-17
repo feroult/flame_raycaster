@@ -22,27 +22,8 @@ class RaycasterExempleGame extends FlameGame with HasDraggables, HasTappables {
 
     final builder = await LevelBuilder.fromTile('assets/tiles/raycaster.tmx');
 
-    final level = (builder
-          ..position(4.0, 4.0)
-          ..direction(1.0, 2.0)
-          ..ceilFloorGradient([
-            0xFF83769C,
-            0xFF83769C,
-            0xFF000000,
-            0xFF000000,
-            0xFFFFCCAA,
-            0xFFFFCCAA
-          ], [
-            0,
-            0.35,
-            0.45,
-            0.55,
-            0.65,
-            1
-          ]))
-        .build();
-
-    add(new RaycasterComponent(level, joystick.controller, size: size));
+    add(new RaycasterComponent(builder.build(), joystick.controller,
+        size: size));
     addAll(joystick.components);
   }
 }
