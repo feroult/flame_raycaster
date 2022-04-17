@@ -76,8 +76,10 @@ class LevelBuilder {
 
   static Future<LevelBuilder> fromTile(String key) async {
     final tmx = await loadTile(key);
-    final map = (tmx.layers[0] as TileLayer).data!;
-    final atlas = await loadImage('img/walls.png');
+    final layer = tmx.layers[0] as TileLayer;
+    final map = layer.data!;
+    // final atlas = await loadImage('img/walls.png');
+    final atlas = await Flame.images.load(tmx.tiledImages()[0].source!);
     return LevelBuilder(map, tmx.width, atlas, tmx.tilesets[0].columns!);
   }
 

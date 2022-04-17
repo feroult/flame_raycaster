@@ -20,7 +20,7 @@ class RaycasterExempleGame extends FlameGame with HasDraggables, HasTappables {
   Future<void> onLoad() async {
     final joystick = await JoystickController.build();
 
-    final builder = await LevelBuilder.fromTile('data/raycaster.tmx');
+    final builder = await LevelBuilder.fromTile('assets/tiles/raycaster.tmx');
 
     final level = (builder
           ..position(4.0, 4.0)

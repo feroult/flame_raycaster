@@ -1,9 +1,9 @@
 import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_raycaster/raycaster_world.dart';
-import 'package:flame_raycaster/utils.dart';
 import 'package:flutter/material.dart';
 
 class CustomRaycasterController extends RaycasterController {
@@ -67,7 +67,7 @@ class JoystickController {
   JoystickController(this.components, this.controller);
 
   static build() async {
-    final image = await loadImage('img/joystick.png');
+    final image = await Flame.images.load('joystick.png');
     final sheet = SpriteSheet.fromColumnsAndRows(
       image: image,
       columns: 6,
@@ -90,7 +90,7 @@ class JoystickController {
     final buttonSize = Vector2.all(80);
     // A button with margin from the edge of the viewport that flips the
     // rendering of the player on the X-axis.
-    final rotateRight = HudButtonComponent(
+    final rotateRight = RotateButton(
         button: SpriteComponent(
           sprite: sheet.getSpriteById(2),
           size: buttonSize,
@@ -103,15 +103,12 @@ class JoystickController {
           right: 40,
           bottom: 60,
         ),
-        onPressed: () {
-          loadMap();
-          controller.isRotatingRight = true;
-        },
+        onPressed: () => controller.isRotatingRight = true,
         onReleased: () => controller.isRotatingRight = false);
 
     // A button with margin from the edge of the viewport that flips the
     // rendering of the player on the Y-axis.
-    final rotateLeft = HudButtonComponent(
+    final rotateLeft = RotateButton(
         button: SpriteComponent(
           sprite: sheet.getSpriteById(2),
           size: buttonSize,
@@ -128,5 +125,26 @@ class JoystickController {
         onReleased: () => controller.isRotatingLeft = false);
 
     return JoystickController([joystick, rotateRight, rotateLeft], controller);
+  }
+}
+
+class RotateButton extends HudButtonComponent {
+  void Function()? onPressed;
+  void Function()? onReleased;
+
+  RotateButton(
+      {this.onPressed,
+      this.onReleased,
+      PositionComponent? button,
+      PositionComponent? buttonDown,
+      EdgeInsets? margin})
+      : super(button: button, buttonDown: buttonDown, margin: margin);
+
+  @override
+  @mustCallSuper
+  bool handleTapCancel(int pointerId) {
+    super.handleTapCancel(pointerId);
+    onReleased?.call();
+    return true;
   }
 }

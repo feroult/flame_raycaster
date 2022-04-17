@@ -15,9 +15,7 @@ dependencies:
 
 flutter:
   assets:
-    - data/level.json
-    - data/level2.json
-    - data/raycaster.tmx
-    - img/walls.png
-    - img/joystick.png
+    - assets/tiles/raycaster.tmx
+    - assets/images/walls.png
+    - assets/images/joystick.png
 
